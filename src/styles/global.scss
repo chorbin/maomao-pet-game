@@ -1,0 +1,71 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #1a1a2e;
+  color: #fff;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #1a1a3e 0%, #2d2b55 30%, #1e3a1e 70%, #162e16 100%);
+}
+
+:root {
+  --primary: #ff6b6b;
+  --primary-light: #ff8e8e;
+  --secondary: #4ecdc4;
+  --accent: #ffe66d;
+  --bg-dark: #1a1a2e;
+  --bg-card: rgba(22, 33, 62, 0.85);
+  --bg-light: #0f3460;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0b8;
+  --gold: #ffd700;
+  --success: #4caf50;
+  --warning: #ff9800;
+  --danger: #f44336;
+}
+
+.van-progress__portion {
+  background: linear-gradient(90deg, var(--primary), var(--accent)) !important;
+}
+
+.van-popup {
+  background: transparent !important;
+}
+
+.van-dialog {
+  background: var(--bg-card) !important;
+  border-radius: 16px !important;
+}
+
+.van-dialog__header {
+  color: #fff !important;
+}
+
+.van-dialog__message {
+  color: var(--text-secondary) !important;
+}
+
+.van-toast {
+  background: rgba(22, 33, 62, 0.95) !important;
+  backdrop-filter: blur(10px);
+}
