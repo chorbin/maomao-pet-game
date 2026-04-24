@@ -16,19 +16,59 @@ function getCtx(): AudioContext {
 export function playMeow() {
   const ctx = getCtx()
   const now = ctx.currentTime
-  const osc = ctx.createOscillator()
+  const osc1 = ctx.createOscillator()
+  const osc2 = ctx.createOscillator()
   const gain = ctx.createGain()
-  osc.type = 'sine'
-  osc.frequency.setValueAtTime(800, now)
-  osc.frequency.exponentialRampToValueAtTime(400, now + 0.15)
-  osc.frequency.exponentialRampToValueAtTime(600, now + 0.25)
-  osc.frequency.exponentialRampToValueAtTime(300, now + 0.4)
-  gain.gain.setValueAtTime(0.3, now)
-  gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4)
-  osc.connect(gain)
+  const vibrato = ctx.createOscillator()
+  const vibratoGain = ctx.createGain()
+
+  osc1.type = 'sine'
+  osc1.frequency.setValueAtTime(900, now)
+  osc1.frequency.exponentialRampToValueAtTime(700, now + 0.08)
+  osc1.frequency.exponentialRampToValueAtTime(550, now + 0.18)
+  osc1.frequency.exponentialRampToValueAtTime(480, now + 0.35)
+  osc1.frequency.exponentialRampToValueAtTime(350, now + 0.5)
+
+  osc2.type = 'triangle'
+  osc2.frequency.setValueAtTime(1800, now)
+  osc2.frequency.exponentialRampToValueAtTime(1400, now + 0.08)
+  osc2.frequency.exponentialRampToValueAtTime(1100, now + 0.18)
+  osc2.frequency.exponentialRampToValueAtTime(960, now + 0.35)
+  osc2.frequency.exponentialRampToValueAtTime(700, now + 0.5)
+
+  vibrato.type = 'sine'
+  vibrato.frequency.setValueAtTime(6, now)
+  vibratoGain.gain.setValueAtTime(0, now)
+  vibratoGain.gain.linearRampToValueAtTime(15, now + 0.1)
+  vibratoGain.gain.linearRampToValueAtTime(8, now + 0.3)
+  vibratoGain.gain.linearRampToValueAtTime(0, now + 0.5)
+  vibrato.connect(vibratoGain)
+  vibratoGain.connect(osc1.frequency)
+
+  gain.gain.setValueAtTime(0, now)
+  gain.gain.linearRampToValueAtTime(0.25, now + 0.03)
+  gain.gain.setValueAtTime(0.25, now + 0.08)
+  gain.gain.linearRampToValueAtTime(0.18, now + 0.2)
+  gain.gain.linearRampToValueAtTime(0.12, now + 0.35)
+  gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5)
+
+  const gain2 = ctx.createGain()
+  gain2.gain.setValueAtTime(0, now)
+  gain2.gain.linearRampToValueAtTime(0.06, now + 0.03)
+  gain2.gain.setValueAtTime(0.06, now + 0.08)
+  gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.5)
+
+  osc1.connect(gain)
+  osc2.connect(gain2)
   gain.connect(ctx.destination)
-  osc.start(now)
-  osc.stop(now + 0.4)
+  gain2.connect(ctx.destination)
+
+  vibrato.start(now)
+  osc1.start(now)
+  osc2.start(now)
+  vibrato.stop(now + 0.5)
+  osc1.stop(now + 0.5)
+  osc2.stop(now + 0.5)
 }
 
 export function playPurr() {
