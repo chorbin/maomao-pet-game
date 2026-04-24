@@ -64,8 +64,6 @@
 
           <g class="cat-head" :style="headTransformStyle">
             <circle :cx="headCx" :cy="headCy" :r="headR" fill="url(#bodyGrad)" />
-            <ellipse :cx="headCx - headR * 0.65" :cy="headCy + headR * 0.15" :rx="headR * 0.3" :ry="headR * 0.25" :fill="furColorLight" opacity="0.3" />
-            <ellipse :cx="headCx + headR * 0.65" :cy="headCy + headR * 0.15" :rx="headR * 0.3" :ry="headR * 0.25" :fill="furColorLight" opacity="0.3" />
             <path :d="leftEarPath" :fill="furColor" />
             <path :d="rightEarPath" :fill="furColor" />
             <path :d="leftInnerEarPath" :fill="earInnerColor" />
