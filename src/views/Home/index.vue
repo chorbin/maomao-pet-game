@@ -435,8 +435,8 @@ watch(() => catStore.cat.emotion, (val) => {
 .status-bar {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 6px;
+  margin-bottom: 8px;
 }
 
 .status-item {
@@ -460,15 +460,15 @@ watch(() => catStore.cat.emotion, (val) => {
 
 .progress-bar {
   flex: 1;
-  height: 14px;
+  height: 10px;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 7px;
+  border-radius: 5px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  border-radius: 7px;
+  border-radius: 5px;
   transition: width 0.5s ease;
 
   &.hunger { background: linear-gradient(90deg, #ff6b6b, #ff8e53); }
@@ -488,8 +488,8 @@ watch(() => catStore.cat.emotion, (val) => {
   justify-content: center;
   align-items: center;
   position: relative;
-  min-height: 250px;
-  margin: 8px 0;
+  min-height: 220px;
+  margin: 4px 0;
 }
 
 .pet-hint {
