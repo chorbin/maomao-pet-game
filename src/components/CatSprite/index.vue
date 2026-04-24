@@ -85,6 +85,8 @@
             </template>
 
             <template v-if="isBlinking">
+              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 1.5" :ry="eyeRy * 0.5" :fill="furColor" />
+              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 1.5" :ry="eyeRy * 0.5" :fill="furColor" />
               <path :d="leftEyeBlink" :stroke="eyeColor" stroke-width="2" fill="none" stroke-linecap="round" />
               <path :d="rightEyeBlink" :stroke="eyeColor" stroke-width="2" fill="none" stroke-linecap="round" />
             </template>
@@ -111,7 +113,7 @@
               <circle :cx="rightEyeX - eyeRx * 0.3" :cy="headCy - headR * 0.02" :r="eyeRx * 0.12" fill="#fff" opacity="0.5" />
             </template>
 
-            <template v-if="stage >= 6 && !isBlinking">
+            <template v-if="stage >= 6 && !isBlinking && emotion !== 'happy' && emotion !== 'excited'">
               <circle :cx="leftEyeX" :cy="headCy - headR * 0.1" :r="eyeRx * 0.8" fill="none" :stroke="'#64b5f6'" stroke-width="0.5" filter="url(#starGlow)" />
               <circle :cx="rightEyeX" :cy="headCy - headR * 0.1" :r="eyeRx * 0.8" fill="none" :stroke="'#ce93d8'" stroke-width="0.5" filter="url(#starGlow)" />
             </template>
