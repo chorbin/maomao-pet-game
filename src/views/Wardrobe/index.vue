@@ -10,13 +10,15 @@
     </div>
 
     <div class="cat-preview">
-      <CatSprite
-        :stage="catStore.growthStage"
-        :bodyType="catStore.cat.bodyType"
-        :emotion="catStore.cat.emotion"
-        :clothing="catStore.cat.equipment.clothing"
-        :decoration="catStore.cat.equipment.decoration"
-      />
+      <div class="cat-preview-inner">
+        <CatSprite
+          :stage="catStore.growthStage"
+          :bodyType="catStore.cat.bodyType"
+          :emotion="catStore.cat.emotion"
+          :clothing="catStore.cat.equipment.clothing"
+          :decoration="catStore.cat.equipment.decoration"
+        />
+      </div>
     </div>
 
     <div class="equipped-section">
@@ -157,7 +159,7 @@ function handleEquip(id: string) {
 
 .cat-preview {
   width: 100%;
-  height: 130px;
+  height: 160px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -165,6 +167,13 @@ function handleEquip(id: string) {
   border-radius: 16px;
   margin-bottom: 12px;
   overflow: hidden;
+}
+
+.cat-preview-inner {
+  width: 120px;
+  height: 120px;
+  transform: scale(0.75);
+  transform-origin: center center;
 }
 
 .equipped-section {
