@@ -22,7 +22,7 @@
           </filter>
         </defs>
 
-        <g :transform="`translate(100,110) scale(${scale}) translate(-100,-110)`" :filter="stage >= 6 ? 'url(#glow)' : ''">
+        <g :transform="`translate(${transformOrigin.x},${transformOrigin.y}) scale(${scale}) translate(-${transformOrigin.x},-${transformOrigin.y})`" :filter="stage >= 6 ? 'url(#glow)' : ''">
           <g class="cat-tail-group" :style="tailTransformStyle">
             <path :d="tailPath" :fill="furColor" />
           </g>
@@ -167,10 +167,16 @@ const fxCount = ref(6)
 let actionTimer: ReturnType<typeof setTimeout> | null = null
 let blinkTimer: ReturnType<typeof setInterval> | null = null
 
+const transformOrigin = computed(() => {
+  const s = props.stage
+  const cy = s <= 1 ? 115 : s <= 2 ? 115 : s <= 3 ? 112 : s <= 4 ? 112 : s <= 5 ? 110 : 108
+  return { x: 100, y: cy }
+})
+
 const scale = computed(() => {
   const s = props.stage
   if (s <= 1) return 0.7; if (s <= 2) return 0.85; if (s <= 3) return 1.0
-  if (s <= 4) return 1.15; if (s <= 5) return 1.3; return 1.45
+  if (s <= 4) return 1.1; if (s <= 5) return 1.2; return 1.25
 })
 
 const furColor = computed(() => {
