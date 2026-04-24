@@ -197,6 +197,13 @@ export const useCatStore = defineStore('cat', () => {
     }
   }
 
+  function cleanup() {
+    if (hungerTimer) {
+      clearInterval(hungerTimer)
+      hungerTimer = null
+    }
+  }
+
   function dismissEvolution() {
     showEvolution.value = false
   }
@@ -217,6 +224,7 @@ export const useCatStore = defineStore('cat', () => {
     allSkills,
     currentBodyType,
     init,
+    cleanup,
     pet,
     feed,
     feedQuickFood,

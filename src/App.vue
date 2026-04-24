@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useCatStore } from '@/stores/catStore'
 import { toggleBgMusic, isBgMusicPlaying, startBgMusic } from '@/game/sounds'
 
@@ -39,6 +39,10 @@ const musicOn = ref(false)
 
 onMounted(() => {
   catStore.init()
+})
+
+onUnmounted(() => {
+  catStore.cleanup()
 })
 
 function toggleMusic() {

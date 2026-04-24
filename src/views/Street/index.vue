@@ -11,7 +11,11 @@
 
     <div class="perform-stage">
       <div class="stage-bg">
-        <div class="spotlight"></div>
+        <div class="stage-curtain-left"></div>
+        <div class="stage-curtain-right"></div>
+        <div class="spotlight" :class="{ active: performing }"></div>
+        <div class="spotlight-secondary" :class="{ active: performing }"></div>
+        <div class="stage-floor"></div>
         <div class="cat-perform">
           <CatSprite
             :stage="catStore.growthStage"
@@ -19,11 +23,30 @@
             :emotion="performing ? 'excited' : catStore.cat.emotion"
             :clothing="catStore.cat.equipment.clothing"
             :decoration="catStore.cat.equipment.decoration"
+            :performSkill="currentSkill"
           />
         </div>
-        <div class="audience" v-if="performing">
-          <span v-for="i in audienceCount" :key="i" class="audience-member">🧑</span>
+        <div class="skill-label" v-if="performing && currentSkillLabel">
+          <span class="skill-label-icon">{{ currentSkillIcon }}</span>
+          <span class="skill-label-text">{{ currentSkillLabel }}</span>
         </div>
+        <div class="audience" v-if="performing || showResult">
+          <span
+            v-for="i in audienceCount"
+            :key="i"
+            class="audience-member"
+            :style="{ animationDelay: `${i * 0.1}s` }"
+          >🧑</span>
+        </div>
+        <div class="audience-reaction" v-if="performing && audienceReacting">
+          <span class="reaction-emoji">{{ audienceReactionEmoji }}</span>
+        </div>
+      </div>
+      <div class="perform-progress" v-if="performing">
+        <div class="progress-bar">
+          <div class="progress-fill" :style="{ width: progressPercent + '%' }"></div>
+        </div>
+        <div class="progress-text">{{ currentSkillIndex + 1 }} / {{ selectedSkills.length }}</div>
       </div>
     </div>
 
@@ -84,12 +107,40 @@ import { SKILLS } from '@/game/constants'
 import { playPerform, playApplause, playCoin } from '@/game/sounds'
 import type { SkillId, PerformResult } from '@/types'
 
+const SKILL_DURATION: Record<string, number> = {
+  wag_tail: 1500,
+  rub: 1600,
+  shake_hand: 1800,
+  roll: 1500,
+  jump: 1400,
+  catch: 1600,
+  backflip: 2000,
+  dance: 2000,
+  hoop: 1800,
+}
+
+const SKILL_REACTION: Record<string, string> = {
+  wag_tail: '😊',
+  rub: '😍',
+  shake_hand: '👏',
+  roll: '😮',
+  jump: '😲',
+  catch: '🔥',
+  backflip: '🤯',
+  dance: '🎉',
+  hoop: '⭐',
+}
+
 const catStore = useCatStore()
 const selectedSkills = ref<SkillId[]>([])
 const performing = ref(false)
 const showResult = ref(false)
 const result = ref<PerformResult | null>(null)
 const audienceCount = ref(0)
+const currentSkill = ref<SkillId | null>(null)
+const currentSkillIndex = ref(0)
+const audienceReacting = ref(false)
+const audienceReactionEmoji = ref('👏')
 
 const availableSkills = computed(() =>
   SKILLS.filter(s => catStore.cat.intimacy >= s.requiredIntimacy)
@@ -98,6 +149,23 @@ const availableSkills = computed(() =>
 const lockedSkills = computed(() =>
   SKILLS.filter(s => catStore.cat.intimacy < s.requiredIntimacy)
 )
+
+const currentSkillLabel = computed(() => {
+  if (!currentSkill.value) return ''
+  const skill = SKILLS.find(s => s.id === currentSkill.value)
+  return skill ? skill.name : ''
+})
+
+const currentSkillIcon = computed(() => {
+  if (!currentSkill.value) return ''
+  const skill = SKILLS.find(s => s.id === currentSkill.value)
+  return skill ? skill.icon : ''
+})
+
+const progressPercent = computed(() => {
+  if (selectedSkills.value.length === 0) return 0
+  return Math.round((currentSkillIndex.value / selectedSkills.value.length) * 100)
+})
 
 function toggleSkill(id: SkillId) {
   const idx = selectedSkills.value.indexOf(id)
@@ -108,25 +176,47 @@ function toggleSkill(id: SkillId) {
   }
 }
 
-function startPerform() {
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+async function startPerform() {
   if (selectedSkills.value.length === 0) return
   performing.value = true
+  showResult.value = false
   audienceCount.value = 0
+  currentSkillIndex.value = 0
   playPerform()
 
-  const interval = setInterval(() => {
+  for (let i = 0; i < 5; i++) {
+    await delay(300)
     audienceCount.value = Math.min(8, audienceCount.value + 1)
-  }, 300)
+  }
 
-  setTimeout(() => {
-    clearInterval(interval)
-    audienceCount.value = Math.floor(Math.random() * 4) + 5
-    result.value = catStore.perform(selectedSkills.value)
-    performing.value = false
-    showResult.value = true
-    playApplause()
-    setTimeout(() => playCoin(), 500)
-  }, 3000)
+  for (let i = 0; i < selectedSkills.value.length; i++) {
+    const skillId = selectedSkills.value[i]
+    currentSkillIndex.value = i
+    currentSkill.value = skillId
+
+    audienceReactionEmoji.value = SKILL_REACTION[skillId] || '👏'
+    audienceReacting.value = true
+
+    const duration = SKILL_DURATION[skillId] || 1500
+    await delay(duration)
+
+    currentSkill.value = null
+    audienceReacting.value = false
+    await delay(300)
+  }
+
+  currentSkillIndex.value = selectedSkills.value.length
+
+  audienceCount.value = Math.floor(Math.random() * 4) + 5
+  result.value = catStore.perform(selectedSkills.value)
+  performing.value = false
+  showResult.value = true
+  playApplause()
+  setTimeout(() => playCoin(), 500)
 }
 
 function resetPerform() {
@@ -134,6 +224,8 @@ function resetPerform() {
   result.value = null
   selectedSkills.value = []
   audienceCount.value = 0
+  currentSkill.value = null
+  currentSkillIndex.value = 0
 }
 </script>
 
@@ -184,8 +276,8 @@ function resetPerform() {
 
 .stage-bg {
   width: 100%;
-  height: 180px;
-  background: linear-gradient(180deg, #2d1b69 0%, #1a1a2e 100%);
+  height: 220px;
+  background: linear-gradient(180deg, #1a0a2e 0%, #2d1b69 40%, #1a1a2e 100%);
   border-radius: 16px;
   position: relative;
   overflow: hidden;
@@ -194,33 +286,168 @@ function resetPerform() {
   align-items: center;
 }
 
+.stage-curtain-left,
+.stage-curtain-right {
+  position: absolute;
+  top: 0;
+  width: 30px;
+  height: 100%;
+  z-index: 3;
+}
+
+.stage-curtain-left {
+  left: 0;
+  background: linear-gradient(90deg, #8b0000 0%, #b71c1c 60%, transparent 100%);
+  border-radius: 0 0 0 16px;
+}
+
+.stage-curtain-right {
+  right: 0;
+  background: linear-gradient(-90deg, #8b0000 0%, #b71c1c 60%, transparent 100%);
+  border-radius: 0 0 16px 0;
+}
+
 .spotlight {
   position: absolute;
-  width: 120px;
-  height: 180px;
-  background: linear-gradient(180deg, rgba(255, 215, 0, 0.15) 0%, transparent 100%);
+  width: 140px;
+  height: 220px;
+  background: linear-gradient(180deg, rgba(255, 215, 0, 0.1) 0%, transparent 100%);
   clip-path: polygon(35% 0%, 65% 0%, 100% 100%, 0% 100%);
+  transition: all 0.5s ease;
+
+  &.active {
+    width: 160px;
+    background: linear-gradient(180deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 215, 0, 0.05) 100%);
+    animation: spotlight-pulse 1.5s ease-in-out infinite;
+  }
+}
+
+.spotlight-secondary {
+  position: absolute;
+  width: 80px;
+  height: 160px;
+  background: linear-gradient(180deg, rgba(156, 39, 176, 0.08) 0%, transparent 100%);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
+  left: 15%;
+  top: 10%;
+  opacity: 0;
+  transition: all 0.5s ease;
+
+  &.active {
+    opacity: 1;
+    animation: spotlight-secondary 2s ease-in-out infinite alternate;
+  }
+}
+
+.stage-floor {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(180deg, rgba(139, 69, 19, 0.3) 0%, rgba(101, 50, 14, 0.5) 100%);
+  border-radius: 0 0 16px 16px;
+}
+
+.stage-floor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
 }
 
 .cat-perform {
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
   position: relative;
   z-index: 2;
 }
 
+.skill-label {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  padding: 4px 14px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  animation: skill-label-in 0.3s ease;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.skill-label-icon {
+  font-size: 16px;
+}
+
+.skill-label-text {
+  font-size: 13px;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
 .audience {
   position: absolute;
-  bottom: 8px;
+  bottom: 12px;
   display: flex;
   gap: 4px;
   justify-content: center;
   width: 100%;
+  z-index: 2;
 }
 
 .audience-member {
-  font-size: 18px;
+  font-size: 16px;
   animation: audience-bounce 0.5s ease infinite alternate;
+}
+
+.audience-reaction {
+  position: absolute;
+  top: 45px;
+  right: 20px;
+  z-index: 5;
+  animation: reaction-pop 0.6s ease;
+}
+
+.reaction-emoji {
+  font-size: 28px;
+  animation: reaction-float 1s ease-in-out infinite;
+}
+
+.perform-progress {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a29bfe, #6c5ce7, #ffd700);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  min-width: 40px;
+  text-align: right;
 }
 
 .skill-select {
@@ -256,6 +483,7 @@ function resetPerform() {
   &.selected {
     border-color: var(--accent);
     background: rgba(255, 230, 109, 0.1);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
   }
 
   &.locked {
@@ -355,5 +583,31 @@ function resetPerform() {
 @keyframes card-appear {
   from { transform: scale(0.8); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spotlight-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes spotlight-secondary {
+  0% { transform: rotate(-5deg); }
+  100% { transform: rotate(5deg); }
+}
+
+@keyframes skill-label-in {
+  from { transform: translateX(-50%) translateY(-10px); opacity: 0; }
+  to { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+@keyframes reaction-pop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes reaction-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
 }
 </style>
