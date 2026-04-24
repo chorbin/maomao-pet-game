@@ -169,8 +169,8 @@ let blinkTimer: ReturnType<typeof setInterval> | null = null
 
 const transformOrigin = computed(() => {
   const s = props.stage
-  const cy = s <= 1 ? 115 : s <= 2 ? 115 : s <= 3 ? 112 : s <= 4 ? 112 : s <= 5 ? 110 : 108
-  return { x: 100, y: cy }
+  const baseCy = s <= 1 ? 120 : s <= 2 ? 120 : s <= 3 ? 118 : s <= 4 ? 118 : s <= 5 ? 116 : 114
+  return { x: 100, y: baseCy }
 })
 
 const scale = computed(() => {
@@ -196,7 +196,8 @@ const noseColor = '#e91e63'; const pupilColor = '#1a1a1a'; const markingColor = 
 const eyeColor = computed(() => props.stage >= 6 ? '#1a1a2e' : '#3e2723')
 
 const bodyCx = 100
-const bodyCy = computed(() => { const s = props.stage; return s <= 1 ? 135 : s <= 2 ? 130 : s <= 3 ? 128 : s <= 4 ? 126 : s <= 5 ? 124 : 122 })
+const yOffset = computed(() => { const s = props.stage; return s <= 1 ? 5 : s <= 2 ? 8 : s <= 3 ? 10 : s <= 4 ? 14 : s <= 5 ? 18 : 22 })
+const bodyCy = computed(() => { const s = props.stage; return (s <= 1 ? 135 : s <= 2 ? 130 : s <= 3 ? 128 : s <= 4 ? 126 : s <= 5 ? 124 : 122) + yOffset.value })
 const bodyRx = computed(() => { const b = props.stage <= 1 ? 28 : props.stage <= 2 ? 34 : props.stage <= 3 ? 40 : props.stage <= 4 ? 46 : props.stage <= 5 ? 52 : 56; if (props.bodyType === 'thin') return b * 0.8; if (props.bodyType === 'fat') return b * 1.25; return b })
 const bodyRy = computed(() => { const b = props.stage <= 1 ? 24 : props.stage <= 2 ? 30 : props.stage <= 3 ? 36 : props.stage <= 4 ? 42 : props.stage <= 5 ? 48 : 52; if (props.bodyType === 'thin') return b * 0.85; if (props.bodyType === 'fat') return b * 1.2; return b })
 const bellyCx = computed(() => bodyCx); const bellyCy = computed(() => bodyCy.value + bodyRy.value * 0.15)
