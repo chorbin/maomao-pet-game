@@ -103,12 +103,13 @@ function isEquipped(id: string): boolean {
 function handleEquip(id: string) {
   const item = SHOP_ITEMS.find(s => s.id === id)
   if (!item) return
-  if (item.type === 'decoration') {
-    catStore.equipItem(id, 'decoration')
-    showToast(`🎀 已穿戴 ${item.name}`)
-  } else if (item.type === 'clothing') {
-    catStore.equipItem(id, 'clothing')
-    showToast(`👗 已穿戴 ${item.name}`)
+  const type = item.type as 'decoration' | 'clothing'
+  if (isEquipped(id)) {
+    catStore.unequipItem(type)
+    showToast(`已脱掉 ${item.name}`)
+  } else {
+    catStore.equipItem(id, type)
+    showToast(`${item.type === 'decoration' ? '🎀' : '👗'} 已穿戴 ${item.name}`)
   }
 }
 </script>
@@ -156,13 +157,14 @@ function handleEquip(id: string) {
 
 .cat-preview {
   width: 100%;
-  height: 180px;
+  height: 130px;
   display: flex;
   justify-content: center;
   align-items: center;
   background: var(--bg-card);
   border-radius: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  overflow: hidden;
 }
 
 .equipped-section {
