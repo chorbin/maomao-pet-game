@@ -56,10 +56,10 @@
 
           <g class="cat-head" :style="headTransformStyle">
             <circle :cx="headCx" :cy="headCy" :r="headR" fill="url(#bodyGrad)" />
-            <polygon :points="leftEarPoints" :fill="furColor" />
-            <polygon :points="rightEarPoints" :fill="furColor" />
-            <polygon :points="leftInnerEarPoints" :fill="earInnerColor" />
-            <polygon :points="rightInnerEarPoints" :fill="earInnerColor" />
+            <path :d="leftEarPath" :fill="furColor" />
+            <path :d="rightEarPath" :fill="furColor" />
+            <path :d="leftInnerEarPath" :fill="earInnerColor" />
+            <path :d="rightInnerEarPath" :fill="earInnerColor" />
 
             <template v-if="decoration === 'deco_crown'">
               <path :d="crownPath" fill="#ffd700" stroke="#ff8f00" stroke-width="1" />
@@ -215,10 +215,34 @@ const nosePoints = computed(() => { const cx = headCx.value, cy = headCy.value +
 const happyMouth = computed(() => { const cx = headCx.value, cy = headCy.value + headR.value * 0.15 + 3; return `M${cx - 6},${cy} Q${cx - 3},${cy + 5} ${cx},${cy + 2} Q${cx + 3},${cy + 5} ${cx + 6},${cy}` })
 const sadMouth = computed(() => { const cx = headCx.value, cy = headCy.value + headR.value * 0.15 + 6; return `M${cx - 5},${cy} Q${cx},${cy - 4} ${cx + 5},${cy}` })
 const whiskers = computed(() => { const cx = headCx.value, cy = headCy.value + headR.value * 0.2, lx = cx - headR.value * 0.5, rx = cx + headR.value * 0.5; return [{ key: 'l1', x1: lx, y1: cy - 3, x2: lx - 15, y2: cy - 8 }, { key: 'l2', x1: lx, y1: cy, x2: lx - 16, y2: cy }, { key: 'l3', x1: lx, y1: cy + 3, x2: lx - 15, y2: cy + 8 }, { key: 'r1', x1: rx, y1: cy - 3, x2: rx + 15, y2: cy - 8 }, { key: 'r2', x1: rx, y1: cy, x2: rx + 16, y2: cy }, { key: 'r3', x1: rx, y1: cy + 3, x2: rx + 15, y2: cy + 8 }] })
-const leftEarPoints = computed(() => { const cx = headCx.value - headR.value * 0.6, cy = headCy.value - headR.value * 0.6, r = headR.value; return `${cx - 5},${cy + r * 0.3} ${cx},${cy - r * 0.4} ${cx + 10},${cy + r * 0.2}` })
-const rightEarPoints = computed(() => { const cx = headCx.value + headR.value * 0.6, cy = headCy.value - headR.value * 0.6, r = headR.value; return `${cx - 10},${cy + r * 0.2} ${cx},${cy - r * 0.4} ${cx + 5},${cy + r * 0.3}` })
-const leftInnerEarPoints = computed(() => { const cx = headCx.value - headR.value * 0.6, cy = headCy.value - headR.value * 0.6, r = headR.value; return `${cx - 2},${cy + r * 0.2} ${cx},${cy - r * 0.25} ${cx + 6},${cy + r * 0.15}` })
-const rightInnerEarPoints = computed(() => { const cx = headCx.value + headR.value * 0.6, cy = headCy.value - headR.value * 0.6, r = headR.value; return `${cx - 6},${cy + r * 0.15} ${cx},${cy - r * 0.25} ${cx + 2},${cy + r * 0.2}` })
+const leftEarPath = computed(() => {
+  const hcx = headCx.value, hcy = headCy.value, r = headR.value
+  const bx = hcx - r * 0.75, by = hcy - r * 0.65
+  const tx = hcx - r * 0.55, ty = hcy - r * 1.35
+  const ex = hcx - r * 0.15, ey = hcy - r * 0.75
+  return `M${bx},${by} Q${bx + 2},${ty + 5} ${tx},${ty} Q${tx + 8},${ty + 8} ${ex},${ey} Q${hcx - r * 0.4},${hcy - r * 0.55} ${bx},${by} Z`
+})
+const rightEarPath = computed(() => {
+  const hcx = headCx.value, hcy = headCy.value, r = headR.value
+  const bx = hcx + r * 0.75, by = hcy - r * 0.65
+  const tx = hcx + r * 0.55, ty = hcy - r * 1.35
+  const ex = hcx + r * 0.15, ey = hcy - r * 0.75
+  return `M${bx},${by} Q${bx - 2},${ty + 5} ${tx},${ty} Q${tx - 8},${ty + 8} ${ex},${ey} Q${hcx + r * 0.4},${hcy - r * 0.55} ${bx},${by} Z`
+})
+const leftInnerEarPath = computed(() => {
+  const hcx = headCx.value, hcy = headCy.value, r = headR.value
+  const bx = hcx - r * 0.6, by = hcy - r * 0.6
+  const tx = hcx - r * 0.5, ty = hcy - r * 1.15
+  const ex = hcx - r * 0.25, ey = hcy - r * 0.7
+  return `M${bx},${by} Q${bx + 1},${ty + 5} ${tx},${ty} Q${tx + 5},${ty + 6} ${ex},${ey} Q${hcx - r * 0.35},${hcy - r * 0.5} ${bx},${by} Z`
+})
+const rightInnerEarPath = computed(() => {
+  const hcx = headCx.value, hcy = headCy.value, r = headR.value
+  const bx = hcx + r * 0.6, by = hcy - r * 0.6
+  const tx = hcx + r * 0.5, ty = hcy - r * 1.15
+  const ex = hcx + r * 0.25, ey = hcy - r * 0.7
+  return `M${bx},${by} Q${bx - 1},${ty + 5} ${tx},${ty} Q${tx - 5},${ty + 6} ${ex},${ey} Q${hcx + r * 0.35},${hcy - r * 0.5} ${bx},${by} Z`
+})
 const pawY = computed(() => bodyCy.value + bodyRy.value * 0.85); const pawRx = computed(() => bodyRx.value * 0.22); const pawRy = computed(() => bodyRy.value * 0.15)
 const tailPath = computed(() => { const bx = bodyCx + bodyRx.value * 0.9, by = bodyCy.value + bodyRy.value * 0.3; return `M${bx},${by} Q${bx + 12},${by - 15} ${bx + 8},${by - 30} Q${bx + 4},${by - 42} ${bx},${by - 38}` })
 const tailTransformStyle = computed(() => ({ transformOrigin: `${bodyCx + bodyRx.value * 0.9}px ${bodyCy.value + bodyRy.value * 0.3}px` }))
