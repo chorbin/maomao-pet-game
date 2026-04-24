@@ -34,7 +34,6 @@
           </template>
 
           <ellipse :cx="bodyCx" :cy="bodyCy" :rx="bodyRx" :ry="bodyRy" fill="url(#bodyGrad)" />
-          <ellipse :cx="bodyCx" :cy="bodyCy - bodyRy * 0.3" :rx="bodyRx * 0.5" :ry="bodyRy * 0.25" :fill="furColorLight" opacity="0.4" />
           <ellipse :cx="bellyCx" :cy="bellyCy" :rx="bellyRx" :ry="bellyRy" fill="url(#bellyGrad)" />
 
           <template v-if="clothing === 'cloth_dress'">
