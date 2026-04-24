@@ -83,9 +83,6 @@
             <template v-if="stage >= 4">
               <path :d="foreheadMarking" :fill="markingColor" opacity="0.6" />
             </template>
-            <template v-if="stage >= 5">
-              <ellipse :cx="headCx" :cy="headCy + headR * 0.2" :rx="headR * 1.3" :ry="headR * 1.1" :fill="furColor" opacity="0.5" />
-            </template>
 
             <template v-if="isBlinking">
               <path :d="leftEyeBlink" :stroke="eyeColor" stroke-width="2" fill="none" stroke-linecap="round" />
