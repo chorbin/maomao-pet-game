@@ -363,6 +363,10 @@ function resetPerform() {
   height: 130px;
   position: relative;
   z-index: 2;
+
+  :deep(.emotion-bubble) {
+    display: none;
+  }
 }
 
 .skill-label {

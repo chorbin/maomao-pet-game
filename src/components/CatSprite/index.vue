@@ -329,7 +329,7 @@ onUnmounted(() => { if (actionTimer) clearTimeout(actionTimer); if (blinkTimer) 
   .p-wag_tail & { animation: p-wag-tail-fast 0.25s ease-in-out 6; }
 }
 .cat-head { transition: transform 0.4s ease; }
-.emotion-bubble { position: absolute; top: 2%; right: 2%; font-size: 28px; animation: float 2s ease-in-out infinite; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+.emotion-bubble { position: absolute; top: 0; right: 0; font-size: 24px; animation: float 2s ease-in-out infinite; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
   &.emotion-happy, &.emotion-excited { animation: float 2s ease-in-out infinite, bounce 0.5s ease; }
   &.emotion-angry { animation: shake 0.3s ease-in-out infinite; }
   &.emotion-hungry, &.emotion-sad { animation: droop 3s ease-in-out infinite; }
