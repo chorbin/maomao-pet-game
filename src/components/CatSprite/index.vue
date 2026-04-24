@@ -25,6 +25,7 @@
         <g :transform="`translate(${transformOrigin.x},${transformOrigin.y}) scale(${scale}) translate(-${transformOrigin.x},-${transformOrigin.y})`" :filter="stage >= 6 ? 'url(#glow)' : ''">
           <g class="cat-tail-group" :style="tailTransformStyle">
             <path :d="tailPath" :fill="furColor" />
+            <path :d="tailTipPath" :fill="furColorLight" opacity="0.5" />
           </g>
 
           <template v-if="clothing === 'cloth_cape'">
@@ -33,6 +34,7 @@
           </template>
 
           <ellipse :cx="bodyCx" :cy="bodyCy" :rx="bodyRx" :ry="bodyRy" fill="url(#bodyGrad)" />
+          <ellipse :cx="bodyCx" :cy="bodyCy - bodyRy * 0.3" :rx="bodyRx * 0.5" :ry="bodyRy * 0.25" :fill="furColorLight" opacity="0.4" />
           <ellipse :cx="bellyCx" :cy="bellyCy" :rx="bellyRx" :ry="bellyRy" fill="url(#bellyGrad)" />
 
           <template v-if="clothing === 'cloth_dress'">
@@ -49,13 +51,21 @@
 
           <g class="paw-left" :style="leftPawStyle">
             <ellipse :cx="bodyCx - bodyRx * 0.35" :cy="pawY" :rx="pawRx" :ry="pawRy" :fill="furColor" />
+            <ellipse :cx="bodyCx - bodyRx * 0.35 - pawRx * 0.4" :cy="pawY - pawRy * 0.3" :rx="pawRx * 0.35" :ry="pawRy * 0.5" :fill="furColor" />
+            <ellipse :cx="bodyCx - bodyRx * 0.35 + pawRx * 0.4" :cy="pawY - pawRy * 0.3" :rx="pawRx * 0.35" :ry="pawRy * 0.5" :fill="furColor" />
+            <ellipse :cx="bodyCx - bodyRx * 0.35" :cy="pawY + pawRy * 0.2" :rx="pawRx * 0.4" :ry="pawRy * 0.35" :fill="bellyColor" opacity="0.6" />
           </g>
           <g class="paw-right" :style="rightPawStyle">
             <ellipse :cx="bodyCx + bodyRx * 0.35" :cy="pawY" :rx="pawRx" :ry="pawRy" :fill="furColor" />
+            <ellipse :cx="bodyCx + bodyRx * 0.35 - pawRx * 0.4" :cy="pawY - pawRy * 0.3" :rx="pawRx * 0.35" :ry="pawRy * 0.5" :fill="furColor" />
+            <ellipse :cx="bodyCx + bodyRx * 0.35 + pawRx * 0.4" :cy="pawY - pawRy * 0.3" :rx="pawRx * 0.35" :ry="pawRy * 0.5" :fill="furColor" />
+            <ellipse :cx="bodyCx + bodyRx * 0.35" :cy="pawY + pawRy * 0.2" :rx="pawRx * 0.4" :ry="pawRy * 0.35" :fill="bellyColor" opacity="0.6" />
           </g>
 
           <g class="cat-head" :style="headTransformStyle">
             <circle :cx="headCx" :cy="headCy" :r="headR" fill="url(#bodyGrad)" />
+            <ellipse :cx="headCx - headR * 0.65" :cy="headCy + headR * 0.15" :rx="headR * 0.3" :ry="headR * 0.25" :fill="furColorLight" opacity="0.3" />
+            <ellipse :cx="headCx + headR * 0.65" :cy="headCy + headR * 0.15" :rx="headR * 0.3" :ry="headR * 0.25" :fill="furColorLight" opacity="0.3" />
             <path :d="leftEarPath" :fill="furColor" />
             <path :d="rightEarPath" :fill="furColor" />
             <path :d="leftInnerEarPath" :fill="earInnerColor" />
@@ -89,18 +99,24 @@
               <path :d="rightEyeHappy" :stroke="eyeColor" stroke-width="2.5" fill="none" stroke-linecap="round" />
             </template>
             <template v-else-if="emotion === 'angry'">
-              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx" :ry="eyeRy" :fill="eyeColor" />
-              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx" :ry="eyeRy" :fill="eyeColor" />
+              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 1.2" :ry="eyeRy * 1.1" :fill="eyeColor" />
+              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 1.2" :ry="eyeRy * 1.1" :fill="eyeColor" />
+              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.6" :ry="eyeRy * 0.9" :fill="pupilColor" />
+              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.6" :ry="eyeRy * 0.9" :fill="pupilColor" />
               <line :x1="leftEyeX - eyeRx * 1.5" :y1="headCy - headR * 0.35" :x2="leftEyeX + eyeRx * 0.5" :y2="headCy - headR * 0.2" :stroke="furColor" stroke-width="2.5" />
               <line :x1="rightEyeX + eyeRx * 1.5" :y1="headCy - headR * 0.35" :x2="rightEyeX - eyeRx * 0.5" :y2="headCy - headR * 0.2" :stroke="furColor" stroke-width="2.5" />
             </template>
             <template v-else>
-              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx" :ry="eyeRy" :fill="eyeColor" />
-              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx" :ry="eyeRy" :fill="eyeColor" />
-              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.5" :ry="eyeRy" :fill="pupilColor" />
-              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.5" :ry="eyeRy" :fill="pupilColor" />
-              <circle :cx="leftEyeX + eyeRx * 0.2" :cy="headCy - headR * 0.15" :r="eyeRx * 0.2" fill="#fff" />
-              <circle :cx="rightEyeX + eyeRx * 0.2" :cy="headCy - headR * 0.15" :r="eyeRx * 0.2" fill="#fff" />
+              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 1.3" :ry="eyeRy * 1.2" fill="#fff" />
+              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 1.3" :ry="eyeRy * 1.2" fill="#fff" />
+              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.9" :ry="eyeRy * 1.1" :fill="eyeColor" />
+              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.9" :ry="eyeRy * 1.1" :fill="eyeColor" />
+              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.5" :ry="eyeRy * 0.9" :fill="pupilColor" />
+              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.5" :ry="eyeRy * 0.9" :fill="pupilColor" />
+              <circle :cx="leftEyeX + eyeRx * 0.3" :cy="headCy - headR * 0.18" :r="eyeRx * 0.3" fill="#fff" />
+              <circle :cx="rightEyeX + eyeRx * 0.3" :cy="headCy - headR * 0.18" :r="eyeRx * 0.3" fill="#fff" />
+              <circle :cx="leftEyeX - eyeRx * 0.2" :cy="headCy - headR * 0.05" :r="eyeRx * 0.15" fill="#fff" opacity="0.6" />
+              <circle :cx="rightEyeX - eyeRx * 0.2" :cy="headCy - headR * 0.05" :r="eyeRx * 0.15" fill="#fff" opacity="0.6" />
             </template>
 
             <template v-if="stage >= 6 && !isBlinking">
@@ -108,14 +124,16 @@
               <circle :cx="rightEyeX" :cy="headCy - headR * 0.1" :r="eyeRx * 0.8" fill="none" :stroke="'#ff4081'" stroke-width="0.5" filter="url(#starGlow)" />
             </template>
 
-            <polygon :points="nosePoints" :fill="noseColor" />
+            <path :d="nosePath" :fill="noseColor" />
+            <ellipse :cx="headCx" :cy="headCy + headR * 0.18" :rx="headR * 0.04" :ry="headR * 0.03" fill="#fff" opacity="0.5" />
             <template v-if="emotion === 'hungry' || emotion === 'sad'">
               <path :d="sadMouth" stroke="#5a3e2b" stroke-width="1.5" fill="none" stroke-linecap="round" />
             </template>
             <template v-else>
               <path :d="happyMouth" stroke="#5a3e2b" stroke-width="1.5" fill="none" stroke-linecap="round" />
+              <ellipse v-if="emotion === 'happy' || emotion === 'excited'" :cx="headCx" :cy="headCy + headR * 0.25" :rx="headR * 0.08" :ry="headR * 0.06" fill="#ff8a80" opacity="0.8" />
             </template>
-            <line v-for="w in whiskers" :key="w.key" :x1="w.x1" :y1="w.y1" :x2="w.x2" :y2="w.y2" stroke="#ddd" stroke-width="0.8" opacity="0.6" />
+            <line v-for="w in whiskers" :key="w.key" :x1="w.x1" :y1="w.y1" :x2="w.x2" :y2="w.y2" :stroke="w.color" :stroke-width="w.width" opacity="0.5" stroke-linecap="round" />
             <template v-if="emotion === 'happy' || emotion === 'excited'">
               <ellipse :cx="leftEyeX - eyeRx" :cy="headCy + headR * 0.15" :rx="headR * 0.12" :ry="headR * 0.07" fill="#ff6b6b" opacity="0.4" />
               <ellipse :cx="rightEyeX + eyeRx" :cy="headCy + headR * 0.15" :rx="headR * 0.12" :ry="headR * 0.07" fill="#ff6b6b" opacity="0.4" />
@@ -211,10 +229,21 @@ const leftEyeHappy = computed(() => { const x = leftEyeX.value, y = headCy.value
 const rightEyeHappy = computed(() => { const x = rightEyeX.value, y = headCy.value - headR.value * 0.1, r = eyeRx.value; return `M${x - r * 1.5},${y} Q${x},${y - r * 2} ${x + r * 1.5},${y}` })
 const leftEyeBlink = computed(() => { const x = leftEyeX.value, y = headCy.value - headR.value * 0.1, r = eyeRx.value; return `M${x - r * 1.5},${y} L${x + r * 1.5},${y}` })
 const rightEyeBlink = computed(() => { const x = rightEyeX.value, y = headCy.value - headR.value * 0.1, r = eyeRx.value; return `M${x - r * 1.5},${y} L${x + r * 1.5},${y}` })
-const nosePoints = computed(() => { const cx = headCx.value, cy = headCy.value + headR.value * 0.15; return `${cx},${cy - 2} ${cx - 3},${cy + 2} ${cx + 3},${cy + 2}` })
+const nosePath = computed(() => { const cx = headCx.value, cy = headCy.value + headR.value * 0.15; return `M${cx},${cy - 2} Q${cx - 4},${cy - 4} ${cx - 3},${cy + 1} Q${cx},${cy + 3} ${cx + 3},${cy + 1} Q${cx + 4},${cy - 4} ${cx},${cy - 2} Z` })
 const happyMouth = computed(() => { const cx = headCx.value, cy = headCy.value + headR.value * 0.15 + 3; return `M${cx - 6},${cy} Q${cx - 3},${cy + 5} ${cx},${cy + 2} Q${cx + 3},${cy + 5} ${cx + 6},${cy}` })
 const sadMouth = computed(() => { const cx = headCx.value, cy = headCy.value + headR.value * 0.15 + 6; return `M${cx - 5},${cy} Q${cx},${cy - 4} ${cx + 5},${cy}` })
-const whiskers = computed(() => { const cx = headCx.value, cy = headCy.value + headR.value * 0.2, lx = cx - headR.value * 0.5, rx = cx + headR.value * 0.5; return [{ key: 'l1', x1: lx, y1: cy - 3, x2: lx - 15, y2: cy - 8 }, { key: 'l2', x1: lx, y1: cy, x2: lx - 16, y2: cy }, { key: 'l3', x1: lx, y1: cy + 3, x2: lx - 15, y2: cy + 8 }, { key: 'r1', x1: rx, y1: cy - 3, x2: rx + 15, y2: cy - 8 }, { key: 'r2', x1: rx, y1: cy, x2: rx + 16, y2: cy }, { key: 'r3', x1: rx, y1: cy + 3, x2: rx + 15, y2: cy + 8 }] })
+const whiskers = computed(() => {
+  const cx = headCx.value, cy = headCy.value + headR.value * 0.2, lx = cx - headR.value * 0.5, rx = cx + headR.value * 0.5
+  const color = '#e0e0e0'
+  return [
+    { key: 'l1', x1: lx, y1: cy - 3, x2: lx - 14, y2: cy - 7, color, width: 0.7 },
+    { key: 'l2', x1: lx, y1: cy, x2: lx - 16, y2: cy, color, width: 0.9 },
+    { key: 'l3', x1: lx, y1: cy + 3, x2: lx - 14, y2: cy + 7, color, width: 0.7 },
+    { key: 'r1', x1: rx, y1: cy - 3, x2: rx + 14, y2: cy - 7, color, width: 0.7 },
+    { key: 'r2', x1: rx, y1: cy, x2: rx + 16, y2: cy, color, width: 0.9 },
+    { key: 'r3', x1: rx, y1: cy + 3, x2: rx + 14, y2: cy + 7, color, width: 0.7 },
+  ]
+})
 const leftEarPath = computed(() => {
   const hcx = headCx.value, hcy = headCy.value, r = headR.value
   const bx = hcx - r * 0.75, by = hcy - r * 0.65
@@ -244,7 +273,15 @@ const rightInnerEarPath = computed(() => {
   return `M${bx},${by} Q${bx - 1},${ty + 5} ${tx},${ty} Q${tx - 5},${ty + 6} ${ex},${ey} Q${hcx + r * 0.35},${hcy - r * 0.5} ${bx},${by} Z`
 })
 const pawY = computed(() => bodyCy.value + bodyRy.value * 0.85); const pawRx = computed(() => bodyRx.value * 0.22); const pawRy = computed(() => bodyRy.value * 0.15)
-const tailPath = computed(() => { const bx = bodyCx + bodyRx.value * 0.9, by = bodyCy.value + bodyRy.value * 0.3; return `M${bx},${by} Q${bx + 12},${by - 15} ${bx + 8},${by - 30} Q${bx + 4},${by - 42} ${bx},${by - 38}` })
+const tailPath = computed(() => {
+  const bx = bodyCx + bodyRx.value * 0.9, by = bodyCy.value + bodyRy.value * 0.3
+  const w = bodyRx.value * 0.18
+  return `M${bx},${by - w} C${bx + 8},${by - 12} ${bx + 14},${by - 28} ${bx + 10},${by - 40} C${bx + 8},${by - 48} ${bx + 2},${by - 50} ${bx - 2},${by - 46} C${bx - 4},${by - 38} ${bx - 2},${by - 20} ${bx - w * 0.3},${by - 2} Z`
+})
+const tailTipPath = computed(() => {
+  const bx = bodyCx + bodyRx.value * 0.9, by = bodyCy.value + bodyRy.value * 0.3
+  return `M${bx + 10},${by - 40} C${bx + 8},${by - 48} ${bx + 2},${by - 50} ${bx - 2},${by - 46} C${bx - 1},${by - 44} ${bx + 4},${by - 44} ${bx + 8},${by - 40} Z`
+})
 const tailTransformStyle = computed(() => ({ transformOrigin: `${bodyCx + bodyRx.value * 0.9}px ${bodyCy.value + bodyRy.value * 0.3}px` }))
 
 const headTransformStyle = computed(() => {
