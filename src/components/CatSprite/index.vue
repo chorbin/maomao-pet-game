@@ -107,16 +107,14 @@
               <line :x1="rightEyeX + eyeRx * 1.5" :y1="headCy - headR * 0.35" :x2="rightEyeX - eyeRx * 0.5" :y2="headCy - headR * 0.2" :stroke="furColor" stroke-width="2.5" />
             </template>
             <template v-else>
-              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 1.3" :ry="eyeRy * 1.2" fill="#fff" />
-              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 1.3" :ry="eyeRy * 1.2" fill="#fff" />
-              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.9" :ry="eyeRy * 1.1" :fill="eyeColor" />
-              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.9" :ry="eyeRy * 1.1" :fill="eyeColor" />
-              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.5" :ry="eyeRy * 0.9" :fill="pupilColor" />
-              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.5" :ry="eyeRy * 0.9" :fill="pupilColor" />
-              <circle :cx="leftEyeX + eyeRx * 0.3" :cy="headCy - headR * 0.18" :r="eyeRx * 0.3" fill="#fff" />
-              <circle :cx="rightEyeX + eyeRx * 0.3" :cy="headCy - headR * 0.18" :r="eyeRx * 0.3" fill="#fff" />
-              <circle :cx="leftEyeX - eyeRx * 0.2" :cy="headCy - headR * 0.05" :r="eyeRx * 0.15" fill="#fff" opacity="0.6" />
-              <circle :cx="rightEyeX - eyeRx * 0.2" :cy="headCy - headR * 0.05" :r="eyeRx * 0.15" fill="#fff" opacity="0.6" />
+              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 1.3" :ry="eyeRy * 1.3" :fill="eyeColor" />
+              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 1.3" :ry="eyeRy * 1.3" :fill="eyeColor" />
+              <ellipse :cx="leftEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.35" :ry="eyeRy * 1.1" :fill="pupilColor" />
+              <ellipse :cx="rightEyeX" :cy="headCy - headR * 0.1" :rx="eyeRx * 0.35" :ry="eyeRy * 1.1" :fill="pupilColor" />
+              <circle :cx="leftEyeX + eyeRx * 0.4" :cy="headCy - headR * 0.2" :r="eyeRx * 0.25" fill="#fff" />
+              <circle :cx="rightEyeX + eyeRx * 0.4" :cy="headCy - headR * 0.2" :r="eyeRx * 0.25" fill="#fff" />
+              <circle :cx="leftEyeX - eyeRx * 0.3" :cy="headCy - headR * 0.02" :r="eyeRx * 0.12" fill="#fff" opacity="0.5" />
+              <circle :cx="rightEyeX - eyeRx * 0.3" :cy="headCy - headR * 0.02" :r="eyeRx * 0.12" fill="#fff" opacity="0.5" />
             </template>
 
             <template v-if="stage >= 6 && !isBlinking">
