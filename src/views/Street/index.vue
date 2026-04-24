@@ -235,7 +235,7 @@ function resetPerform() {
   display: flex;
   flex-direction: column;
   padding: 12px 16px;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .page-header {
@@ -456,12 +456,16 @@ function resetPerform() {
 
 .skill-select {
   flex: 1;
-  margin-bottom: 16px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
 
   h3 {
     font-size: 15px;
     color: var(--accent);
     margin-bottom: 10px;
+    flex-shrink: 0;
   }
 }
 
@@ -469,6 +473,10 @@ function resetPerform() {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding-bottom: 4px;
 }
 
 .skill-card {
