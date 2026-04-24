@@ -112,8 +112,8 @@
             </template>
 
             <template v-if="stage >= 6 && !isBlinking">
-              <circle :cx="leftEyeX" :cy="headCy - headR * 0.1" :r="eyeRx * 0.8" fill="none" :stroke="'#00e5ff'" stroke-width="0.5" filter="url(#starGlow)" />
-              <circle :cx="rightEyeX" :cy="headCy - headR * 0.1" :r="eyeRx * 0.8" fill="none" :stroke="'#ff4081'" stroke-width="0.5" filter="url(#starGlow)" />
+              <circle :cx="leftEyeX" :cy="headCy - headR * 0.1" :r="eyeRx * 0.8" fill="none" :stroke="'#64b5f6'" stroke-width="0.5" filter="url(#starGlow)" />
+              <circle :cx="rightEyeX" :cy="headCy - headR * 0.1" :r="eyeRx * 0.8" fill="none" :stroke="'#ce93d8'" stroke-width="0.5" filter="url(#starGlow)" />
             </template>
 
             <path :d="nosePath" :fill="noseColor" />
@@ -191,19 +191,19 @@ const scale = computed(() => {
 
 const furColor = computed(() => {
   const s = props.stage
-  if (s <= 1) return '#ffe0b2'; if (s <= 2) return '#ffb74d'; if (s <= 3) return '#ff9800'
-  if (s <= 4) return '#f57c00'; if (s <= 5) return '#e65100'; return '#ff6d00'
+  if (s <= 1) return '#fafafa'; if (s <= 2) return '#f5f5f5'; if (s <= 3) return '#f0f0f0'
+  if (s <= 4) return '#eaeaea'; if (s <= 5) return '#e8e8e8'; return '#e0e0e0'
 })
 
 const furColorLight = computed(() => {
   const s = props.stage
-  if (s <= 1) return '#fff8e1'; if (s <= 2) return '#ffe0b2'; if (s <= 3) return '#ffcc80'
-  if (s <= 4) return '#ffb74d'; if (s <= 5) return '#ffa726'; return '#ff9100'
+  if (s <= 1) return '#ffffff'; if (s <= 2) return '#fefefe'; if (s <= 3) return '#fdfdfd'
+  if (s <= 4) return '#fcfcfc'; if (s <= 5) return '#fafafa'; return '#f5f5f5'
 })
 
-const bellyColor = '#fff3e0'; const bellyColorLight = '#ffffff'; const earInnerColor = '#ffab91'
-const noseColor = '#e91e63'; const pupilColor = '#1a1a1a'; const markingColor = '#e65100'
-const eyeColor = computed(() => props.stage >= 6 ? '#1a1a2e' : '#3e2723')
+const bellyColor = '#ffffff'; const bellyColorLight = '#ffffff'; const earInnerColor = '#ffcdd2'
+const noseColor = '#f48fb1'; const pupilColor = '#1a1a1a'; const markingColor = '#bdbdbd'
+const eyeColor = computed(() => props.stage >= 6 ? '#1565c0' : '#42a5f5')
 
 const bodyCx = 100
 const yOffset = computed(() => { const s = props.stage; return s <= 1 ? 20 : s <= 2 ? 23 : s <= 3 ? 25 : s <= 4 ? 29 : s <= 5 ? 33 : 52 })
@@ -317,7 +317,7 @@ const capeInnerPath = computed(() => { const cx = bodyCx, cy = bodyCy.value, rx 
 const crownPath = computed(() => { const cx = headCx.value, cy = headCy.value - headR.value * 0.9, w = headR.value * 0.7; return `M${cx - w},${cy + 8} L${cx - w * 0.7},${cy} L${cx - w * 0.35},${cy + 4} L${cx},${cy - 6} L${cx + w * 0.35},${cy + 4} L${cx + w * 0.7},${cy} L${cx + w},${cy + 8} Z` })
 const bowtieLeftPoints = computed(() => { const cx = headCx.value, cy = headCy.value + headR.value * 0.55; return `${cx},${cy} ${cx - 10},${cy - 6} ${cx - 10},${cy + 6}` })
 const bowtieRightPoints = computed(() => { const cx = headCx.value, cy = headCy.value + headR.value * 0.55; return `${cx},${cy} ${cx + 10},${cy - 6} ${cx + 10},${cy + 6}` })
-const stars = computed(() => { if (props.stage < 6) return []; const cx = bodyCx, cy = bodyCy.value; return [{ key: 's1', x: cx - 30, y: cy - 40, r: 2, color: '#ffd700' }, { key: 's2', x: cx + 25, y: cy - 35, r: 1.5, color: '#ff4081' }, { key: 's3', x: cx - 20, y: cy + 30, r: 1.8, color: '#00e5ff' }, { key: 's4', x: cx + 35, y: cy + 20, r: 2.2, color: '#ffd700' }, { key: 's5', x: cx + 5, y: cy - 55, r: 1.5, color: '#76ff03' }] })
+const stars = computed(() => { if (props.stage < 6) return []; const cx = bodyCx, cy = bodyCy.value; return [{ key: 's1', x: cx - 30, y: cy - 40, r: 2, color: '#90caf9' }, { key: 's2', x: cx + 25, y: cy - 35, r: 1.5, color: '#ce93d8' }, { key: 's3', x: cx - 20, y: cy + 30, r: 1.8, color: '#80deea' }, { key: 's4', x: cx + 35, y: cy + 20, r: 2.2, color: '#90caf9' }, { key: 's5', x: cx + 5, y: cy - 55, r: 1.5, color: '#b39ddb' }] })
 const emotionEmoji = computed(() => { const m: Record<string, string> = { happy: '😺', calm: '😸', angry: '😾', hungry: '😿', sad: '😿', excited: '🤩' }; return m[props.emotion] || '😸' })
 
 const SKILL_ANIM_MAP: Record<string, PerformAnim> = {
@@ -363,7 +363,7 @@ onUnmounted(() => { if (actionTimer) clearTimeout(actionTimer); if (blinkTimer) 
 
 <style scoped lang="scss">
 .cat-sprite { position: relative; display: flex; justify-content: center; align-items: center; cursor: pointer; }
-.cat-glow { position: absolute; width: 80%; height: 80%; border-radius: 50%; background: radial-gradient(circle, rgba(255,109,0,0.3) 0%, transparent 70%); animation: pulse-glow 2s ease-in-out infinite; }
+.cat-glow { position: absolute; width: 80%; height: 80%; border-radius: 50%; background: radial-gradient(circle, rgba(144,202,249,0.3) 0%, transparent 70%); animation: pulse-glow 2s ease-in-out infinite; }
 .cat-container { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transition: transform 0.3s ease;
   &.wiggle { animation: wiggle-body 0.4s ease-in-out 2; }
   &.stretch { animation: stretch-body 1.5s ease-in-out; }
