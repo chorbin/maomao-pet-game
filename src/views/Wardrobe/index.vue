@@ -89,13 +89,15 @@ function getItemName(id: string): string {
   return SHOP_ITEMS.find(s => s.id === id)?.name || '未知'
 }
 
-function getEquippedName(id: string): string {
-  const item = SHOP_ITEMS.find(s => s.id === id)
+function getEquippedName(effectId: string): string {
+  const item = SHOP_ITEMS.find(s => s.effect === effectId || s.id === effectId)
   return item ? `${item.icon} ${item.name}` : '未知'
 }
 
 function isEquipped(id: string): boolean {
-  return catStore.cat.equipment.decoration === id || catStore.cat.equipment.clothing === id
+  const item = SHOP_ITEMS.find(s => s.id === id)
+  const effectValue = item?.effect || id
+  return catStore.cat.equipment.decoration === effectValue || catStore.cat.equipment.clothing === effectValue
 }
 
 function handleEquip(id: string) {

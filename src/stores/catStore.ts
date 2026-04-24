@@ -170,10 +170,12 @@ export const useCatStore = defineStore('cat', () => {
   }
 
   function equipItem(itemId: string, type: 'decoration' | 'clothing') {
+    const item = SHOP_ITEMS.find(s => s.id === itemId)
+    const effectValue = item?.effect || itemId
     if (type === 'decoration') {
-      cat.value = { ...cat.value, equipment: { ...cat.value.equipment, decoration: itemId } }
+      cat.value = { ...cat.value, equipment: { ...cat.value.equipment, decoration: effectValue } }
     } else {
-      cat.value = { ...cat.value, equipment: { ...cat.value.equipment, clothing: itemId } }
+      cat.value = { ...cat.value, equipment: { ...cat.value.equipment, clothing: effectValue } }
     }
   }
 
