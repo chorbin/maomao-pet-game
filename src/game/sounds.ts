@@ -74,25 +74,52 @@ export function playMeow() {
 export function playPurr() {
   const ctx = getCtx()
   const now = ctx.currentTime
+  const duration = 1.2
+
   const osc = ctx.createOscillator()
-  const gain = ctx.createGain()
-  osc.type = 'sawtooth'
-  osc.frequency.setValueAtTime(26, now)
+  osc.type = 'sine'
+  osc.frequency.setValueAtTime(28, now)
+
   const lfo = ctx.createOscillator()
+  lfo.type = 'sine'
+  lfo.frequency.setValueAtTime(26, now)
   const lfoGain = ctx.createGain()
-  lfo.frequency.setValueAtTime(20, now)
-  lfoGain.gain.setValueAtTime(10, now)
+  lfoGain.gain.setValueAtTime(12, now)
   lfo.connect(lfoGain)
   lfoGain.connect(osc.frequency)
-  gain.gain.setValueAtTime(0.08, now)
-  gain.gain.linearRampToValueAtTime(0.12, now + 0.3)
-  gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8)
-  osc.connect(gain)
+
+  const filter = ctx.createBiquadFilter()
+  filter.type = 'lowpass'
+  filter.frequency.setValueAtTime(150, now)
+  filter.Q.setValueAtTime(1, now)
+
+  const gain = ctx.createGain()
+  gain.gain.setValueAtTime(0, now)
+  gain.gain.linearRampToValueAtTime(0.15, now + 0.15)
+  gain.gain.setValueAtTime(0.15, now + duration * 0.6)
+  gain.gain.exponentialRampToValueAtTime(0.01, now + duration)
+
+  osc.connect(filter)
+  filter.connect(gain)
   gain.connect(ctx.destination)
+
+  const osc2 = ctx.createOscillator()
+  osc2.type = 'sine'
+  osc2.frequency.setValueAtTime(56, now)
+  const gain2 = ctx.createGain()
+  gain2.gain.setValueAtTime(0, now)
+  gain2.gain.linearRampToValueAtTime(0.06, now + 0.15)
+  gain2.gain.setValueAtTime(0.06, now + duration * 0.6)
+  gain2.gain.exponentialRampToValueAtTime(0.01, now + duration)
+  osc2.connect(gain2)
+  gain2.connect(ctx.destination)
+
   lfo.start(now)
   osc.start(now)
-  lfo.stop(now + 0.8)
-  osc.stop(now + 0.8)
+  osc2.start(now)
+  lfo.stop(now + duration)
+  osc.stop(now + duration)
+  osc2.stop(now + duration)
 }
 
 export function playSplash() {
