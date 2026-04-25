@@ -33,16 +33,16 @@ export const FISH_QUALITY_CONFIG: Record<FishQuality, { label: string; color: st
 }
 
 export const FISH_LIST: FishItem[] = [
-  { id: 'crucian', name: '小鲫鱼', quality: 'common', hungerRestore: 10, icon: '🐟', color: '#b0b0b0' },
-  { id: 'grass_carp', name: '草鱼', quality: 'common', hungerRestore: 12, icon: '🐟', color: '#b0b0b0' },
-  { id: 'bass', name: '鲈鱼', quality: 'good', hungerRestore: 20, icon: '🐠', color: '#4caf50' },
-  { id: 'carp', name: '鲤鱼', quality: 'good', hungerRestore: 22, icon: '🐠', color: '#4caf50' },
-  { id: 'salmon', name: '三文鱼', quality: 'rare', hungerRestore: 35, icon: '🐟', color: '#2196f3' },
-  { id: 'tuna', name: '金枪鱼', quality: 'rare', hungerRestore: 38, icon: '🐟', color: '#2196f3' },
-  { id: 'lobster', name: '龙虾', quality: 'epic', hungerRestore: 55, icon: '🦞', color: '#9c27b0' },
-  { id: 'king_crab', name: '帝王蟹', quality: 'epic', hungerRestore: 60, icon: '🦀', color: '#9c27b0' },
-  { id: 'golden_dragon', name: '金龙鱼', quality: 'legendary', hungerRestore: 80, icon: '🐉', color: '#ff9800' },
-  { id: 'pearl_shell', name: '珍珠贝', quality: 'legendary', hungerRestore: 85, icon: '🦪', color: '#ff9800' },
+  { id: 'crucian', name: '小鲫鱼', quality: 'common', hungerRestore: 10, sellPrice: 3, icon: '🐟', color: '#b0b0b0' },
+  { id: 'grass_carp', name: '草鱼', quality: 'common', hungerRestore: 12, sellPrice: 4, icon: '🐟', color: '#b0b0b0' },
+  { id: 'bass', name: '鲈鱼', quality: 'good', hungerRestore: 20, sellPrice: 8, icon: '🐠', color: '#4caf50' },
+  { id: 'carp', name: '鲤鱼', quality: 'good', hungerRestore: 22, sellPrice: 10, icon: '🐠', color: '#4caf50' },
+  { id: 'salmon', name: '三文鱼', quality: 'rare', hungerRestore: 35, sellPrice: 18, icon: '🐟', color: '#2196f3' },
+  { id: 'tuna', name: '金枪鱼', quality: 'rare', hungerRestore: 38, sellPrice: 22, icon: '🐟', color: '#2196f3' },
+  { id: 'lobster', name: '龙虾', quality: 'epic', hungerRestore: 55, sellPrice: 40, icon: '🦞', color: '#9c27b0' },
+  { id: 'king_crab', name: '帝王蟹', quality: 'epic', hungerRestore: 60, sellPrice: 50, icon: '🦀', color: '#9c27b0' },
+  { id: 'golden_dragon', name: '金龙鱼', quality: 'legendary', hungerRestore: 80, sellPrice: 100, icon: '🐉', color: '#ff9800' },
+  { id: 'pearl_shell', name: '珍珠贝', quality: 'legendary', hungerRestore: 85, sellPrice: 120, icon: '🦪', color: '#ff9800' },
 ]
 
 export const SKILLS: Skill[] = [

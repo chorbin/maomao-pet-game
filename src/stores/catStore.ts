@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { CatState, EmotionType, BodyType, InventoryItem, Equipment, SkillId } from '@/types'
 import { calculateOfflineProgress, getGrowthStage, getBodyType, getUnlockedSkills, getIntimacyLevel } from '@/game/catLogic'
-import { SKILLS, PET_INTIMACY_GAIN, FEED_INTIMACY_GAIN, FISH_INTIMACY_GAIN, GROWTH_STAGES, SHOP_ITEMS, QUICK_FOOD_HUNGER } from '@/game/constants'
+import { SKILLS, PET_INTIMACY_GAIN, FEED_INTIMACY_GAIN, FISH_INTIMACY_GAIN, GROWTH_STAGES, SHOP_ITEMS, QUICK_FOOD_HUNGER, FISH_LIST } from '@/game/constants'
 import { catchFish } from '@/game/fishLogic'
 import { calculatePerformResult } from '@/game/performLogic'
 
@@ -199,6 +199,16 @@ export const useCatStore = defineStore('cat', () => {
     }
   }
 
+  function sellFish(fishId: string): number {
+    const fish = FISH_LIST.find(f => f.id === fishId)
+    if (!fish) return 0
+    const inv = cat.value.inventory.find(i => i.itemId === fishId)
+    if (!inv || inv.quantity <= 0) return 0
+    cat.value.coins += fish.sellPrice
+    removeFromInventory(fishId)
+    return fish.sellPrice
+  }
+
   function cleanup() {
     if (hungerTimer) {
       clearInterval(hungerTimer)
@@ -236,6 +246,7 @@ export const useCatStore = defineStore('cat', () => {
     equipItem,
     unequipItem,
     removeFromInventory,
+    sellFish,
     dismissEvolution,
     renameCat,
   }

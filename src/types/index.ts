@@ -15,6 +15,7 @@ export interface FishItem {
   name: string
   quality: FishQuality
   hungerRestore: number
+  sellPrice: number
   icon: string
   color: string
 }

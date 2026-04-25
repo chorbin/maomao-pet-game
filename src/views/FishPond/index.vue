@@ -52,6 +52,8 @@
           <span class="fish-icon">{{ getFishIcon(inv.itemId) }}</span>
           <span class="fish-name">{{ getFishName(inv.itemId) }}</span>
           <span class="fish-qty">x{{ inv.quantity }}</span>
+          <span class="fish-price">🪙{{ getFishPrice(inv.itemId) }}</span>
+          <button class="sell-btn" @click="handleSellFish(inv.itemId)">卖</button>
         </div>
         <div class="fish-empty" v-if="fishInventory.length === 0">
           还没有钓到鱼哦，快来钓鱼吧！
@@ -69,7 +71,8 @@
 import { ref, computed } from 'vue'
 import { useCatStore } from '@/stores/catStore'
 import { FISH_LIST, FISH_QUALITY_CONFIG, FISHING_ANIMATION_DURATION } from '@/game/constants'
-import { playSplash, playCatchFish } from '@/game/sounds'
+import { playSplash, playCatchFish, playCoin } from '@/game/sounds'
+import { showToast } from 'vant'
 import type { FishItem } from '@/types'
 
 const catStore = useCatStore()
@@ -103,6 +106,20 @@ function getFishIcon(id: string) {
 
 function getFishName(id: string) {
   return FISH_LIST.find(f => f.id === id)?.name || '未知'
+}
+
+function getFishPrice(id: string) {
+  return FISH_LIST.find(f => f.id === id)?.sellPrice || 0
+}
+
+function handleSellFish(fishId: string) {
+  const fish = FISH_LIST.find(f => f.id === fishId)
+  if (!fish) return
+  const price = catStore.sellFish(fishId)
+  if (price > 0) {
+    playCoin()
+    showToast(`卖出 ${fish.name}，获得 🪙${price}`)
+  }
 }
 
 function fishItemGlow(id: string) {
@@ -392,6 +409,24 @@ function startFishing() {
 .fish-icon { font-size: 24px; }
 .fish-name { font-size: 11px; color: var(--text-secondary); }
 .fish-qty { font-size: 12px; font-weight: bold; color: var(--accent); }
+.fish-price { font-size: 10px; color: var(--gold); }
+
+.sell-btn {
+  margin-top: 2px;
+  padding: 2px 10px;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 8px;
+  background: rgba(255, 215, 0, 0.1);
+  color: var(--gold);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:active {
+    background: rgba(255, 215, 0, 0.3);
+    transform: scale(0.95);
+  }
+}
 
 .fish-empty {
   grid-column: 1 / -1;
